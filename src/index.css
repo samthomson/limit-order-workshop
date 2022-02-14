@@ -5,7 +5,10 @@ body {
         'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image: url('./blurred_punks.png');
+    background: rgb(9,22,46);
+    background: linear-gradient(180deg, rgba(9,22,46,1) 0%, rgba(38,105,245,1) 100%);
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 code {
