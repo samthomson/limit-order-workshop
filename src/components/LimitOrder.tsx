@@ -4,6 +4,7 @@ import { ethers } from 'ethers'
 import { useGelatoLimitOrders } from '../utils/useGelatoLimitOrders'
 import tokensList from '../tokensList.json'
 import { ParaSwap } from 'paraswap'
+import { OptimalRate } from 'paraswap-core'
 import { BigNumber } from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 
@@ -21,7 +22,22 @@ const useMarketRate = (
     useEffect(() => {
         const fetchRate = async () => {
             if (!srcAmount) return
-            // TODO: grab rate from Paraswap and compute destAmount / srcAmount rate and set it
+            
+            // create paraswap instance for polygon network
+            const paraSwap = new ParaSwap(137)
+            const amount = new BigNumber(+srcAmount).multipliedBy(10**18)
+            const priceRoute = await paraSwap.getRate(
+                srcToken, 
+                destToken, 
+                amount.toFixed(0)
+            )
+
+            // error
+            // todo: handle better
+            if ('message' in priceRoute)    return
+
+            const marketRate = new BigNumber(priceRoute.destAmount).div(priceRoute.srcAmount)
+            setRate(marketRate.toFixed(5))
         }
 
         fetchRate()
@@ -30,7 +46,7 @@ const useMarketRate = (
     return rate
 }
 
-const useOnSubmitOrder = (
+const useOnSubmitLimitOrder = (
     srcTokenAddress: string,
     destTokenAddress: string,
     amount: string | undefined,
@@ -47,6 +63,8 @@ const useOnSubmitOrder = (
         // Minimum amount of outTOken which the users wants to receive back
         const outputMinReturn = ethers.utils.parseUnits(minReturn, '18')
 
+        // if not matic
+        // todo: better understand this guard
         if (srcTokenAddress !== '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE')
             await gelatoLimitOrders.approveTokenAmount(
                 destTokenAddress,
@@ -117,12 +135,17 @@ export default function LimitOrder() {
         '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
     )
     const [desiredRate, setDesiredRate] = useState<string>()
-    const marketRate = undefined // TODO grab market rate from paraSwap
+    const marketRate = useMarketRate(srcTokenAddress, destTokenAddress, amount)
     const rate = desiredRate ?? marketRate
 
     const minReturn = !amount || !rate ? undefined : String(+amount * +rate)
 
-    const onLimitOrder = undefined // TODO: grab submit callback
+    const onLimitOrder = useOnSubmitLimitOrder(
+        srcTokenAddress,
+        destTokenAddress,
+        amount,
+        minReturn,
+    )
 
     const account = undefined // TODO: get your public address from metamask
 
@@ -151,7 +174,7 @@ export default function LimitOrder() {
                 color="secondary"
                 fullWidth
                 onClick={onLimitOrder}
-                disabled={false} // TODO: disable subbmit button if: account not connected, balance is isufficient
+                disabled={!account} // TODO: disable submit button if: account not connected OR if balance is insufficient
             >
                 Submit sell order
             </Button>

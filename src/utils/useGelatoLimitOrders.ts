@@ -9,7 +9,7 @@ export function useGelatoLimitOrders() {
 
         return new GelatoLimitOrders(
             137,
-            undefined, // TODO: pass signed
+            library.getSigner(account),
             'paraswap'
         )
     }, [account, library])

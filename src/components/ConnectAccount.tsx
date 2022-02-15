@@ -21,7 +21,7 @@ const Address = styled.div`
     font-size: 1.1rem;
     text-align: center;
 `
-
+// 137 = polygon
 export const injected = new InjectedConnector({ supportedChainIds: [137] })
 
 const formatAddress = (address: string) =>
@@ -34,9 +34,7 @@ export default function ConnectAccount() {
         <Box justifyContent="center" alignItems="center" width={200}>
             {!account ? (
                 <StyledButton
-                    onClick={() => {
-                        // TODO : activate the injected provider
-                    }}
+                    onClick={() => activate(injected)}
                 >
                     Connect to MetaMask
                 </StyledButton>

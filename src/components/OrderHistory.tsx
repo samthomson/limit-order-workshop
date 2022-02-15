@@ -13,7 +13,12 @@ const useOrders = (): Order[] | null => {
 
     useEffect(() => {
         const fetchOrders = async () => {
-            // TODO: fetch orders from gelato
+            // fetch orders from gelato
+            if (!gelatoLimitOrders || !account) return
+            
+            const orders = await gelatoLimitOrders.getOrders(account)
+
+            if (orders) setOrders(orders)
         }
         fetchOrders()
     }, [account, gelatoLimitOrders, setOrders])
