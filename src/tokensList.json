@@ -2,8 +2,8 @@
     "name": "Minimalistic Token List",
     "version": {
         "major": 1,
-        "minor": 1,
-        "patch": 2
+        "minor": 2,
+        "patch": 0
     },
     "tags": {},
     "keywords": ["minimalistic"],
@@ -47,6 +47,14 @@
             "decimals": 18,
             "chainId": 137,
             "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+        },
+        {
+            "name": "ParaSwap",
+            "address": "0x42d61D766B85431666B39B89C43011f24451bFf6",
+            "symbol": "PSP",
+            "decimals": 18,
+            "chainId": 137,
+            "logoURI": "https://etherscan.io/token/images/paraswaptoken_32.png"
         }
     ]
 }
