@@ -149,7 +149,7 @@ export default function LimitOrder() {
     )
 
     // get your public address from metamask
-    const { account } = useWeb3React<Web3Provider>()
+    const { account } = useWeb3React()
 
     return (
         <Box width={400} justifyContent="center">
