@@ -143,7 +143,8 @@ function TokenInput({
 }
 
 export default function LimitOrder() {
-    const [amount, setAmount] = useState<string>('1')
+    const defaultAmount = '1'
+    const [amount, setAmount] = useState<string>(defaultAmount)
     const [srcTokenAddress, setSrcTokenAddress] = useState<string>(
         '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
     )
@@ -154,7 +155,12 @@ export default function LimitOrder() {
     const { rate: marketRate, error: marketRateError } = useMarketRate(srcTokenAddress, destTokenAddress, amount)
     const rate = desiredRate ?? marketRate
 
-    const minReturn = !amount || !rate ? undefined : String(+amount * +rate)
+    useEffect(() => {
+        setAmount(defaultAmount)
+    }, [destTokenAddress])
+
+    const showMinReturn = !!amount && !!rate && !marketRateError
+    const minReturn = showMinReturn ? String(+amount * +rate) : undefined
 
     const onLimitOrder = useOnSubmitLimitOrder(
         srcTokenAddress,
@@ -176,13 +182,13 @@ export default function LimitOrder() {
             />
             <TextField
                 type="text"
-                value={rate}
+                value={rate || ''}
                 onChange={(evt) => setDesiredRate(evt.target.value)}
                 variant="outlined"
                 fullWidth
             />
             <TokenInput
-                amount={minReturn}
+                amount={minReturn || ''}
                 tokenAddress={destTokenAddress}
                 onTokenChange={setDestTokenAddress}
             />
