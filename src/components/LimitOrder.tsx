@@ -129,7 +129,7 @@ function TokenInput({
 export default function LimitOrder() {
     const [amount, setAmount] = useState<string>('1')
     const [srcTokenAddress, setSrcTokenAddress] = useState<string>(
-        '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
+        '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
     )
     const [destTokenAddress, setDestTokenAddress] = useState<string>(
         '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
