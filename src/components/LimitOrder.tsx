@@ -132,7 +132,7 @@ export default function LimitOrder() {
         '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
     )
     const [destTokenAddress, setDestTokenAddress] = useState<string>(
-        '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
+        '0x42d61D766B85431666B39B89C43011f24451bFf6'
     )
     const [desiredRate, setDesiredRate] = useState<string>()
     const marketRate = useMarketRate(srcTokenAddress, destTokenAddress, amount)
