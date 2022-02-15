@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Web3Provider } from '@ethersproject/providers'
 import { Box, Button, MenuItem, Select, TextField } from '@material-ui/core'
 import { ethers } from 'ethers'
 import { useGelatoLimitOrders } from '../utils/useGelatoLimitOrders'
