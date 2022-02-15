@@ -3,7 +3,7 @@
     "version": {
         "major": 1,
         "minor": 2,
-        "patch": 0
+        "patch": 1
     },
     "tags": {},
     "keywords": ["minimalistic"],
@@ -50,7 +50,7 @@
         },
         {
             "name": "ParaSwap",
-            "address": "0x42d61D766B85431666B39B89C43011f24451bFf6",
+            "address": "0x42d61d766b85431666b39b89c43011f24451bff6",
             "symbol": "PSP",
             "decimals": 18,
             "chainId": 137,
