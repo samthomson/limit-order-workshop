@@ -37,6 +37,7 @@ const formatAmount = (amount: string) =>
 
 const formatdate = (dateInSec: string) => {
     const date = new Date(parseInt(dateInSec, 10) * 1000)
+    // return moment(date).format('HH:mm:ss on MMM Mo YYYY')
     return date.toLocaleString()
 }
 
@@ -48,22 +49,24 @@ export default function OrderHistory() {
                 orders.map((order) => (
                     <ListItem key={order.id}>
                         <span>
+                            {formatAmount(order.inputAmount)}&nbsp;
                             <img
                                 src={tokenLogo(order.inputToken)}
                                 alt=""
-                                width={15}
-                                height={15}
-                            />{' '}
-                            {formatAmount(order.inputAmount)}
+                                width={18}
+                                height={18}
+                            />
                             <span> for </span>
+                            {formatAmount(order.minReturn)}&nbsp;
                             <img
                                 src={tokenLogo(order.outputToken)}
                                 alt=""
-                                width={15}
-                                height={15}
-                            />{' '}
-                            {formatAmount(order.minReturn)}
-                            <span>- {formatdate(order.createdAt)}</span>
+                                width={18}
+                                height={18}
+                            />
+                            <small>
+                                <span>&nbsp;({formatdate(order.createdAt)})</span>
+                            </small>
                         </span>
                     </ListItem>
                 ))}
