@@ -5,7 +5,6 @@ import { ethers } from 'ethers'
 import { useGelatoLimitOrders } from '../utils/useGelatoLimitOrders'
 import tokensList from '../tokensList.json'
 import { ParaSwap } from 'paraswap'
-import { OptimalRate } from 'paraswap-core'
 import { BigNumber } from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 
