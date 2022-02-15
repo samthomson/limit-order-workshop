@@ -76,7 +76,8 @@ const useOnSubmitLimitOrder = (
             inputAmount, // amount to sell
             outputMinReturn // minimum amount received
         )
-
+        const successMessage = `view transaction here https://polygonscan.com/tx/${tx.hash}`
+        console.log(successMessage)
     }
 }
 
