@@ -41,7 +41,6 @@ const TitleCtn = styled(Paper)`
 `
 const LimitOrderCtn = styled(Paper)`
     width: 400px;
-    height: 300px;
     display: flex;
     justify-content: center;
     margin-top: 20px;

@@ -3,7 +3,7 @@ import { Box, Button, MenuItem, Select, TextField } from '@material-ui/core'
 import { ethers } from 'ethers'
 import { useGelatoLimitOrders } from '../utils/useGelatoLimitOrders'
 import tokensList from '../tokensList.json'
-import { ParaSwap } from 'paraswap'
+import { APIError, ParaSwap } from 'paraswap'
 import { BigNumber } from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 
@@ -11,15 +11,24 @@ const useTokensList = () => {
     return tokensList.tokens
 }
 
+type MarketRateResponse = {
+    rate?: string
+    error?: string
+}
+
 const useMarketRate = (
     srcToken: string,
     destToken: string,
     srcAmount: string | undefined
-) => {
+):MarketRateResponse => {
     const [rate, setRate] = useState<string | undefined>(undefined)
+    const [error, setError] = useState<string | undefined>(undefined)
 
     useEffect(() => {
         const fetchRate = async () => {
+            setRate(undefined)
+            setError(undefined)
+
             if (!srcAmount) return
             
             // create paraswap instance for polygon network
@@ -39,17 +48,17 @@ const useMarketRate = (
             // todo: handle better
             if ('message' in priceRoute) {
                 console.error(priceRoute)
-                return
+                setError((priceRoute as APIError).message)
+            } else {
+                const marketRate = new BigNumber(priceRoute.destAmount).div(priceRoute.srcAmount)
+                setRate(marketRate.toFixed(5))
             }
-
-            const marketRate = new BigNumber(priceRoute.destAmount).div(priceRoute.srcAmount)
-            setRate(marketRate.toFixed(5))
         }
 
         fetchRate()
-    }, [srcToken, destToken, srcAmount, setRate])
+    }, [srcToken, destToken, srcAmount/*, setRate*/])
 
-    return rate
+    return { rate, error }
 }
 
 const useOnSubmitLimitOrder = (
@@ -142,7 +151,7 @@ export default function LimitOrder() {
         '0x42d61d766b85431666b39b89c43011f24451bff6'
     )
     const [desiredRate, setDesiredRate] = useState<string>()
-    const marketRate = useMarketRate(srcTokenAddress, destTokenAddress, amount)
+    const { rate: marketRate, error: marketRateError } = useMarketRate(srcTokenAddress, destTokenAddress, amount)
     const rate = desiredRate ?? marketRate
 
     const minReturn = !amount || !rate ? undefined : String(+amount * +rate)
@@ -177,6 +186,10 @@ export default function LimitOrder() {
                 tokenAddress={destTokenAddress}
                 onTokenChange={setDestTokenAddress}
             />
+            {marketRateError && <div>
+                <strong>There was an error checking the rate:</strong>
+                <p>{marketRateError}</p>
+            </div>}
             <Button
                 variant="contained"
                 color="secondary"
