@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Web3Provider } from '@ethersproject/providers'
 import { Box, Button, MenuItem, Select, TextField } from '@material-ui/core'
 import { ethers } from 'ethers'
 import { useGelatoLimitOrders } from '../utils/useGelatoLimitOrders'
@@ -147,7 +148,8 @@ export default function LimitOrder() {
         minReturn,
     )
 
-    const account = undefined // TODO: get your public address from metamask
+    // get your public address from metamask
+    const { account } = useWeb3React<Web3Provider>()
 
     return (
         <Box width={400} justifyContent="center">
