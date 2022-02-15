@@ -28,12 +28,19 @@ const useMarketRate = (
             const priceRoute = await paraSwap.getRate(
                 srcToken, 
                 destToken, 
-                amount.toFixed(0)
+                amount.toFixed(0),
+                undefined,
+                undefined,
+                undefined,
+                18
             )
 
             // error
             // todo: handle better
-            if ('message' in priceRoute)    return
+            if ('message' in priceRoute) {
+                console.error(priceRoute)
+                return
+            }
 
             const marketRate = new BigNumber(priceRoute.destAmount).div(priceRoute.srcAmount)
             setRate(marketRate.toFixed(5))
@@ -132,7 +139,7 @@ export default function LimitOrder() {
         '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
     )
     const [destTokenAddress, setDestTokenAddress] = useState<string>(
-        '0x42d61D766B85431666B39B89C43011f24451bFf6'
+        '0x42d61d766b85431666b39b89c43011f24451bff6'
     )
     const [desiredRate, setDesiredRate] = useState<string>()
     const marketRate = useMarketRate(srcTokenAddress, destTokenAddress, amount)
