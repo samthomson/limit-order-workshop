@@ -26,6 +26,26 @@ const useOrders = (): Order[] | null => {
     return orders
 }
 
+const usePastOrders = (): Order[] | null => {
+    const gelatoLimitOrders = useGelatoLimitOrders()
+    const [orders, setOrders] = useState<Order[] | null>(null)
+    const { account } = useWeb3React()
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            // fetch orders from gelato
+            if (!gelatoLimitOrders || !account) return
+            
+            const orders = await gelatoLimitOrders.getExecutedOrders(account)
+
+            if (orders) setOrders(orders)
+        }
+        fetchOrders()
+    }, [account, gelatoLimitOrders, setOrders])
+
+    return orders
+}
+
 const tokenLogo = (address: string): string | undefined => {
     return tokensList.tokens.find(
         (t) => t.address.toLowerCase() === address.toLowerCase()
@@ -43,6 +63,7 @@ const formatdate = (dateInSec: string) => {
 
 export default function OrderHistory() {
     const orders = useOrders()
+    const pastOrders = usePastOrders()
     return (
         <List>
             {orders &&
@@ -70,6 +91,34 @@ export default function OrderHistory() {
                         </span>
                     </ListItem>
                 ))}
+
+            {pastOrders && <>
+                <p>{pastOrders.length} filled orders</p>
+                {pastOrders.map((order) => (
+                    <ListItem key={order.id}>
+                        <span>
+                            {formatAmount(order.inputAmount)}&nbsp;
+                            <img
+                                src={tokenLogo(order.inputToken)}
+                                alt=""
+                                width={18}
+                                height={18}
+                            />
+                            <span> for </span>
+                            {formatAmount(order.minReturn)}&nbsp;
+                            <img
+                                src={tokenLogo(order.outputToken)}
+                                alt=""
+                                width={18}
+                                height={18}
+                            />
+                            <small>
+                                <span>&nbsp;({formatdate(order.createdAt)}, status: {order.status})</span>
+                            </small>
+                        </span>
+                    </ListItem>
+                ))}
+            </>}
         </List>
     )
 }
