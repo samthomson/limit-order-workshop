@@ -49,7 +49,6 @@ const LimitOrderCtn = styled(Paper)`
 `
 const OrderHistoryCtn = styled(Paper)`
     width: 400px;
-    height: 100px;
     margin-top: 20px;
     padding: 20px 30px;
     background: white;
