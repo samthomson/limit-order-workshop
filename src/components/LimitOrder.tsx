@@ -41,7 +41,8 @@ const useMarketRate = (
                 undefined,
                 undefined,
                 undefined,
-                18
+                18, // todo: get from a config
+                18 // todo: get from a config
             )
 
             // error
@@ -80,11 +81,15 @@ const useOnSubmitLimitOrder = (
 
         // if not matic
         // todo: better understand this guard
-        if (srcTokenAddress !== '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE')
+        if (srcTokenAddress !== '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') {
+            console.log('we are not transferring matic, so first will look to approve the token amount?')
             await gelatoLimitOrders.approveTokenAmount(
                 destTokenAddress,
                 inputAmount
             )
+        } else {
+            console.log('not seeking approval first')
+        }
 
         const tx = await gelatoLimitOrders.submitLimitOrder(
             srcTokenAddress, // Token to sell
