@@ -65,7 +65,7 @@ export default function OrderHistory() {
                                 height={18}
                             />
                             <small>
-                                <span>&nbsp;({formatdate(order.createdAt)})</span>
+                                <span>&nbsp;({formatdate(order.createdAt)}, status: {order.status})</span>
                             </small>
                         </span>
                     </ListItem>
